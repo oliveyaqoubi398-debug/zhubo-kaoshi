@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>钱皇蚕丝主播售后服务规则考核</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", sans-serif; }
+        body { background: #f8f5f0; color: #333; line-height: 1.6; padding-bottom: 50px; }
+        .header { background: #000; color: #D4AF37; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top:0; z-index:99; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo img { height: 40px; width: auto; }
+        .logo span { font-size: 22px; font-weight: bold; color:#D4AF37; }
+        .timer { font-size: 18px; font-weight: bold; color: #D4AF37; background: #111; padding: 5px 10px; border-radius: 4px; }
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .exam-title { text-align: center; margin-bottom: 20px; font-size: 24px; color: #000; font-weight:bold; }
+        .user-info { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .user-info label { display: block; margin-bottom: 8px; font-weight: bold; color: #000; }
+        .user-info input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
+        .question { background: #fff; padding: 18px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-left: 4px solid #D4AF37; }
+        .q-type { font-size:13px; color:#999; margin-bottom:6px; }
+        .question-title { font-size: 16px; margin-bottom: 12px; color: #000; }
+        .options { margin-left: 10px; }
+        .option { margin-bottom: 8px; cursor: pointer; padding: 8px 10px; border-radius: 4px; transition: all 0.2s; font-size:15px; border:1px solid #eee; }
+        .option:hover { background: #f9f6f0; border-color: #D4AF37; }
+        .option input { margin-right: 8px; }
+        .submit-btn { display: block; width: 100%; padding: 15px; background: #D4AF37; color: #000; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin: 30px 0; transition: background 0.2s; }
+        .submit-btn:hover { background: #c89f20; }
+        .result { display: none; text-align: center; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 20px; }
+        .result-score { font-size: 40px; color: #D4AF37; margin: 20px 0; font-weight:bold; }
+        .result-text { font-size: 18px; margin-bottom: 20px; color: #333; }
+        .error-list { text-align: left; margin-top: 20px; padding: 20px; background: #f9f9f9; border-radius: 8px; font-size:14px; border:1px solid #eee; }
+        .error-list h3 { color: #D4AF37; margin-bottom: 10px; }
+        .error-list p { margin-bottom:12px; line-height:1.7; border-bottom:1px dashed #eee; padding-bottom:8px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="logo.png" alt="钱皇蚕丝LOGO">
+            <span>钱皇蚕丝 · 主播考核</span>
+        </div>
+        <div class="timer" id="timer">剩余时间：45:00</div>
+    </div>
+
+    <div class="container">
+        <h1 class="exam-title">主播售后服务规则100题考核</h1>
+        
+        <div class="user-info">
+            <label for="name">姓名（主播/中控）：</label>
+            <input type="text" id="name" placeholder="请输入你的姓名" required>
+            <label for="id">工号（选填）：</label>
+            <input type="text" id="id" placeholder="请输入你的工号">
+        </div>
+
+        <div id="exam-form"></div>
+        <button class="submit-btn" onclick="submitExam()">提交试卷</button>
+
+        <div class="result" id="result">
+            <h2>考核结果</h2>
+            <div class="result-score" id="score">0</div>
+            <div class="result-text" id="result-text"></div>
+            <div class="error-list" id="error-list"></div>
+        </div>
+    </div>
+
+<script>
+const questions = [
+{"id":1,"type":"single","title":"下列哪一项属于“售后服务不符”违规行为？","options":["A. 口播承诺的退换服务与商品详情页不一致","B. 主播按商品详情页如实说明售后政策","C. 直播中不提及任何售后相关内容","D. 商品详情页与平台规则一致"],"answer":"A"},
+{"id":2,"type":"single","title":"主播口播商品支持“30天无理由退换”，但商品详情页仅标注“7天无理由”，这种行为属于？","options":["A. 正常营销","B. 售后服务不符违规","C. 平台鼓励的服务升级","D. 不影响用户决策的表述"],"answer":"B"},
+{"id":3,"type":"single","title":"下列哪种说法属于违规的过度承诺退换服务？","options":["A. 商品支持7天无理由退换，详情页有标注","B. 拆封后也支持无理由退换","C. 不影响二次销售可退换","D. 按平台售后规则执行"],"answer":"B"},
+{"id":4,"type":"single","title":"以下哪句表述属于违规的“无效退款”承诺？","options":["A. 商品有质量问题支持退款","B. 不好用全额退款","C. 非质量问题按平台规则处理","D. 支持售后三包服务"],"answer":"B"},
+{"id":5,"type":"single","title":"主播宣传商品有运费险，但实际商家未投保，属于哪种违规？","options":["A. 宣传的商品服务保障权益与实际不符","B. 价格违规","C. 虚假宣传产品功效","D. 不属于违规"],"answer":"A"},
+{"id":6,"type":"single","title":"宣传“假一赔二”，是否符合平台对假货赔付的要求？","options":["A. 符合，鼓励更高赔付承诺","B. 不符合，属于违规表述","C. 只要详情页标注就合规","D. 仅口播说明不违规"],"answer":"B"},
+{"id":7,"type":"single","title":"主播口播“不喜欢免费退、免运费”，但商品详情页未标注承担退货运费，这种行为属于？","options":["A. 正常服务承诺","B. 宣传退换货运费包费与实际不符违规","C. 不影响用户体验的表述","D. 平台允许的引流话术"],"answer":"B"},
+{"id":8,"type":"single","title":"下列哪种“终身”相关表述属于违规？","options":["A. 商品质保1年，详情页标注","B. 终身免费保修","C. 按平台售后规则执行质保","D. 提供1年售后支持"],"answer":"B"},
+{"id":9,"type":"single","title":"商品运费险仅赔付10元，主播宣传“包全部退货运费”，这种行为？","options":["A. 合规，运费险可以覆盖所有运费","B. 违规，无论商品是否有运费险，都属于夸大承诺","C. 只要商品有运费险就合规","D. 只有用户实际运费超过10元才违规"],"answer":"B"},
+{"id":10,"type":"single","title":"主播宣传商品为“安心购商品”，但实际并非安心购商品，属于？","options":["A. 售后服务不符违规","B. 产品质量违规","C. 正常营销话术","D. 不影响用户决策的表述"],"answer":"A"},
+{"id":11,"type":"single","title":"平台对“售后服务不符”的违规行为，通常会先采取哪种处置？","options":["A. 情节轻微：警告、下架违规商品","B. 直接永久封禁账号","C. 仅口头提醒主播","D. 不做任何处理"],"answer":"A"},
+{"id":12,"type":"single","title":"单场直播中累计出现3次及以上“售后服务不符”违规，属于哪种情节？","options":["A. 轻微","B. 一般","C. 严重","D. 特别严重"],"answer":"C"},
+{"id":13,"type":"single","title":"近14天内直播累计出现6场及以上重复违规，属于？","options":["A. 轻微","B. 一般","C. 严重","D. 特别严重"],"answer":"D"},
+{"id":14,"type":"single","title":"短视频近14天内累计违规2次，属于哪种情节？","options":["A. 轻微","B. 一般","C. 严重","D. 特别严重"],"answer":"B"},
+{"id":15,"type":"single","title":"下列哪种行为属于“售后服务不符”？","options":["A. 口播说明“支持7天无理由退换，详情页可查”","B. 背景板标注“30天无理由退换”，但详情页仅标注7天","C. 商品详情页与口播的售后内容完全一致","D. 主播不提及任何售后相关内容"],"answer":"B"},
+{"id":16,"type":"single","title":"主播宣传“拆封后可无理由退换”，是否合规？","options":["A. 合规，提升用户体验","B. 不合规，属于过度承诺退换服务","C. 只要商品支持就合规","D. 仅口播说明不违规"],"answer":"B"},
+{"id":17,"type":"single","title":"下列哪项属于违规的“免费试”承诺？","options":["A. 商品支持7天无理由，不影响二次销售可退","B. 免费试穿，不喜欢直接退","C. 按平台规则执行退换","D. 质量问题可退换"],"answer":"B"},
+{"id":18,"type":"single","title":"主播宣传商品“质保期为5年”，但实际商品详情页标注质保期为1年，属于？","options":["A. 售后服务不符违规","B. 产品质量违规","C. 正常夸大宣传","D. 不违规"],"answer":"A"},
+{"id":19,"type":"single","title":"下列哪种说法属于违规的“永久售后”表述？","options":["A. 提供终身免费售后咨询","B. 商品质保1年，详情页标注","C. 按平台规则提供售后支持","D. 支持三包服务"],"answer":"A"},
+{"id":20,"type":"single","title":"主播口播“买贵必赔，差价双倍返还”，但商品详情页无价保相关信息，属于？","options":["A. 售后服务不符违规","B. 价格违规","C. 正常营销话术","D. 不违规"],"answer":"A"},
+{"id":21,"type":"single","title":"商品详情页标注“支持7天无理由退换”，主播口播“支持15天无理由退换”，这种行为？","options":["A. 合规，属于服务升级","B. 违规，属于售后服务不符","C. 只要用户没投诉就不违规","D. 仅口播说明不违规"],"answer":"B"},
+{"id":22,"type":"single","title":"下列哪种行为不属于“售后服务不符”？","options":["A. 口播的退换服务与详情页一致","B. 背景板的售后承诺与详情页不一致","C. 字幕标注的运费险服务与实际不符","D. 管理员评论中夸大售后权益"],"answer":"A"},
+{"id":23,"type":"single","title":"主播宣传课程“永久有效、无限回看”，属于？","options":["A. 合规，课程类商品可这样承诺","B. 违规，属于过度承诺服务权益","C. 只要详情页标注就合规","D. 仅口播说明不违规"],"answer":"B"},
+{"id":24,"type":"single","title":"主播宣传流量套餐“终身有效”，是否合规？","options":["A. 合规，流量套餐可长期使用","B. 不合规，属于过度承诺服务权益","C. 只要运营商确认就合规","D. 仅口播说明不违规"],"answer":"B"},
+{"id":25,"type":"single","title":"商品详情页未标注“承担退货运费”，主播口播“退货我承担运费”，属于？","options":["A. 合规，主播个人承诺可兑现即可","B. 违规，属于宣传退换货运费包费与实际不符","C. 只要用户没投诉就不违规","D. 不违规，属于正常引流话术"],"answer":"B"},
+{"id":26,"type":"single","title":"平台对“情节特别严重”的“售后服务不符”违规，会采取哪种处置？","options":["A. 警告、下架违规商品","B. 冻结佣金账户30天，永久关闭商品分享权限","C. 仅口头提醒主播","D. 不做任何处理"],"answer":"B"},
+{"id":27,"type":"single","title":"下列哪种说法属于违规的“无效全额退”承诺？","options":["A. 商品有质量问题支持全额退款","B. 使用没效果全额退款","C. 非质量问题按平台规则处理","D. 支持售后三包服务"],"answer":"B"},
+{"id":28,"type":"single","title":"主播宣传商品“插上电终身免费使用”，属于？","options":["A. 合规，商品质量有保障","B. 违规，属于过度承诺服务权益","C. 只要详情页标注就合规","D. 仅口播说明不违规"],"answer":"B"},
+{"id":29,"type":"single","title":"商品详情页标注“支持运费险”，主播口播“退货包全部运费”，这种行为？","options":["A. 合规，运费险可以覆盖所有运费","B. 违规，属于夸大运费险服务承诺","C. 只要用户实际运费在运费险赔付范围内就合规","D. 不违规，属于正常服务承诺"],"answer":"B"},
+{"id":30,"type":"single","title":"主播宣传商品“假一罚四”，但商品详情页无相关信息，属于？","options":["A. 合规，鼓励更高赔付承诺","B. 违规，属于售后服务不符","C. 只要用户没投诉就不违规","D. 不违规，属于正常营销话术"],"answer":"B"},
+{"id":31,"type":"multiple","title":"下列哪些行为属于“售后服务不符”违规？","options":["A. 口播承诺的退换服务与商品详情页不一致","B. 背景板标注的售后权益与实际不符","C. 字幕宣传的运费险服务与实际不符","D. 管理员评论中夸大售后权益"],"answer":"ABCD"},
+{"id":32,"type":"multiple","title":"过度承诺退换服务保障的行为包括？","options":["A. 宣传商品支持30天无理由退换，但详情页仅标注7天","B. 承诺拆封后也支持无理由退换","C. 宣传无效退款、不好用全额退款","D. 承诺不影响二次销售可退换"],"answer":"ABC"},
+{"id":33,"type":"multiple","title":"下列哪些“终身/永久”相关表述属于违规？","options":["A. 终身免费保修","B. 永久售后支持","C. 终身提供点评辅导服务","D. 商品质保1年，详情页标注"],"answer":"ABC"},
+{"id":34,"type":"multiple","title":"宣传的商品服务保障权益与实际不符的行为包括？","options":["A. 口播商品有运费险，实际商家未投保","B. 宣传商品为安心购商品，实际并非","C. 宣传质保期大于三年，实际未履行","D. 商品详情页与口播的售后内容完全一致"],"answer":"ABC"},
+{"id":35,"type":"multiple","title":"宣传退换货运费包费与实际不符的行为包括？","options":["A. 口播不喜欢免费退、免运费，详情页未标注承担运费","B. 宣传包全部退货运费，但商品仅投保基础运费险","C. 商品详情页标注运费险，主播如实说明","D. 承诺退货我承担运费，实际未履约"],"answer":"ABD"},
+{"id":36,"type":"multiple","title":"平台对“售后服务不符”违规的情节划分包括？","options":["A. 轻微","B. 一般","C. 严重","D. 特别严重"],"answer":"ABCD"},
+{"id":37,"type":"multiple","title":"下列哪些行为属于“情节特别严重”的违规？","options":["A. 近14天内直播累计6场及以上重复违规","B. 短视频近14天内累计违规10次及以上","C. 对消费者、商家造成严重不良影响，引发大量投诉","D. 首次违规，未造成负面影响"],"answer":"ABC"},
+{"id":38,"type":"multiple","title":"主播口播中，下列哪些说法属于违规表述？","options":["A. 商品支持7天无理由退换，详情页可查","B. 拆封后不喜欢也能退","C. 不好用全额退款","D. 买贵必赔，差价双倍返还，详情页有价保信息"],"answer":"BC"},
+{"id":39,"type":"multiple","title":"背景板/字幕中，下列哪些内容属于违规？","options":["A. 30天无理由退换（详情页仅标注7天）","B. 假一罚四（详情页无相关信息）","C. 运费险退货包运费（详情页未标注运费险）","D. 支持7天无理由退换，详情页可查"],"answer":"ABC"},
+{"id":40,"type":"multiple","title":"短视频内容中，下列哪些行为属于“售后服务不符”？","options":["A. 视频文案夸大售后权益，与详情页不一致","B. 视频画面展示的运费险信息与实际不符","C. 视频口播如实说明售后政策","D. 视频中不提及任何售后相关内容"],"answer":"AB"},
+{"id":41,"type":"multiple","title":"下列哪些属于过度承诺服务权益的行为？","options":["A. 宣传课程永久有效、无限回看","B. 宣传流量套餐终身有效","C. 承诺终身免费提供售后咨询","D. 商品详情页标注质保1年，主播如实说明"],"answer":"ABC"},
+{"id":42,"type":"multiple","title":"商品详情页未标注的售后内容，主播可以在直播中宣传吗？","options":["A. 可以，只要主播能兑现承诺","B. 不可以，任何售后内容都需与详情页一致","C. 不可以，即使主播能兑现也属于违规","D. 可以，只要用户没投诉就不违规"],"answer":"BC"},
+{"id":43,"type":"multiple","title":"关于运费险的宣传，下列哪些说法属于违规？","options":["A. 商品有运费险，退货可赔付运费险金额","B. 包全部退货运费（商品仅投保基础运费险）","C. 免费退，不用花一分钱运费（详情页未标注承担运费）","D. 运费险仅赔付首重运费，超重部分需自行承担"],"answer":"BC"},
+{"id":44,"type":"multiple","title":"下列哪些行为属于“宣传的假货赔付范围不符合法律法规要求”？","options":["A. 宣传假一赔一","B. 宣传假一赔二","C. 宣传假一赔三（符合平台规则）","D. 不提及假货赔付相关内容"],"answer":"AB"},
+{"id":45,"type":"multiple","title":"主播在直播中宣传的售后内容，需要与哪些内容保持一致？","options":["A. 商品详情页标注的售后政策","B. 平台的通用售后规则","C. 主播个人的口头承诺","D. 商家私下承诺的额外服务"],"answer":"AB"},
+{"id":46,"type":"multiple","title":"下列哪些情况属于“售后服务不符”？","options":["A. 商品详情页标注7天无理由，主播口播15天无理由","B. 商品详情页标注无运费险，主播口播有运费险","C. 商品详情页标注质保1年，主播口播质保5年","D. 商品详情页与主播口播的售后内容完全一致"],"answer":"ABC"},
+{"id":47,"type":"multiple","title":"平台对“情节一般”的“售后服务不符”违规，会采取哪些处置？","options":["A. 下架违规商品","B. 冻结佣金账户中带货违规商品订单成交额5%金额30天","C. 关闭商品分享权限3天","D. 永久封禁账号"],"answer":"AB"},
+{"id":48,"type":"multiple","title":"下列哪些行为属于“情节严重”的违规？","options":["A. 单场直播中累计3次及以上违规","B. 近14天内直播累计3-5场重复违规","C. 对消费者造成财产损失的损害","D. 首次违规，未造成负面影响"],"answer":"ABC"},
+{"id":49,"type":"multiple","title":"主播在直播中宣传“无效退款”，可能会导致哪些后果？","options":["A. 平台判定为“售后服务不符”违规","B. 情节严重会被关闭商品分享权限","C. 情节特别严重会被永久关闭商品分享权限","D. 不违规，属于正常营销话术"],"answer":"ABC"},
+{"id":50,"type":"multiple","title":"下列哪些说法属于合规的售后表述？","options":["A. 商品支持7天无理由退换，详情页可查","B. 商品有质量问题，按平台规则处理","C. 商品有运费险，退货可按运费险规则赔付","D. 不喜欢免费退，不用花一分钱（详情页未标注）"],"answer":"ABC"},
+{"id":51,"type":"multiple","title":"关于“终身保修”的宣传，下列哪些说法正确？","options":["A. 属于过度承诺服务权益，违规","B. 只要商品详情页标注就合规","C. 即使商品详情页标注也属于违规","D. 仅口播说明不违规"],"answer":"AC"},
+{"id":52,"type":"multiple","title":"下列哪些行为属于“宣传的退换服务与实际不符”？","options":["A. 口播30天无理由退换，详情页仅标注7天","B. 背景板拆封后可退，详情页未标注","C. 字幕无效退款，详情页未标注","D. 主播如实说明详情页标注的退换政策"],"answer":"ABC"},
+{"id":53,"type":"multiple","title":"平台对“售后服务不符”违规的处置措施包括？","options":["A. 警告、下架违规商品","B. 冻结佣金账户金额","C. 关闭/永久关闭商品分享权限","D. 永久封禁账号"],"answer":"ABCD"},
+{"id":54,"type":"multiple","title":"下列哪些属于“售后服务不符”的违规场景？","options":["A. 直播-画面：背景板的售后承诺与详情页不一致","B. 直播-口播：主播口播的退换服务与详情页不一致","C. 短视频-文案：视频文案夸大售后权益与详情页不一致","D. 直播中不提及任何售后相关内容"],"answer":"ABC"},
+{"id":55,"type":"multiple","title":"主播在直播中宣传“安心购商品”，但实际并非安心购商品，会导致？","options":["A. 平台判定为“售后服务不符”违规","B. 情节严重会被关闭商品分享权限","C. 情节特别严重会被永久关闭商品分享权限","D. 不违规，属于正常营销话术"],"answer":"ABC"},
+{"id":56,"type":"multiple","title":"关于“退货运费”的宣传，下列哪些说法属于违规？","options":["A. 退货我承担运费（详情页未标注）","B. 包全部退货运费（商品仅投保基础运费险）","C. 运费险赔付首重运费，超重部分需自行承担","D. 不喜欢免费退，免运费（详情页未标注）"],"answer":"ABD"},
+{"id":57,"type":"multiple","title":"下列哪些行为属于“过度承诺服务权益”？","options":["A. 宣传课程无限复学、永久有效","B. 承诺终身提供产品更新服务","C. 宣传商品永久免费维修","D. 商品详情页标注质保1年，主播如实说明"],"answer":"ABC"},
+{"id":58,"type":"multiple","title":"主播在直播中宣传“假一赔四”，但商品详情页无相关信息，会导致？","options":["A. 平台判定为“售后服务不符”违规","B. 情节严重会被关闭商品分享权限","C. 情节特别严重会被永久关闭商品分享权限","D. 不违规，属于正常营销话术"],"answer":"ABC"},
+{"id":59,"type":"multiple","title":"下列哪些情况属于“售后服务不符”的违规？","options":["A. 商品详情页标注无运费险，主播口播有运费险","B. 商品详情页标注质保1年，主播口播质保5年","C. 商品详情页支持7天无理由，主播口播一致","D. 商品详情页非安心购，主播口播安心购"],"answer":"ABD"},
+{"id":60,"type":"multiple","title":"主播要避免“售后服务不符”违规，需要做到？","options":["A. 口播的售后内容与商品详情页完全一致","B. 背景板、字幕的售后内容与商品详情页完全一致","C. 不夸大、不承诺详情页未标注的售后权益","D. 不宣传任何“终身/永久”相关的服务承诺"],"answer":"ABCD"},
+{"id":61,"type":"judge","title":"主播口播的售后内容，只要主播能兑现，就可以与商品详情页不一致。","options":["对","错"],"answer":"错"},
+{"id":62,"type":"judge","title":"宣传“30天无理由退换”，但商品详情页仅标注7天，属于“售后服务不符”违规。","options":["对","错"],"answer":"对"},
+{"id":63,"type":"judge","title":"承诺“拆封后也支持无理由退换”，属于过度承诺退换服务，违规。","options":["对","错"],"answer":"对"},
+{"id":64,"type":"judge","title":"宣传“无效退款、不好用全额退款”，属于违规表述。","options":["对","错"],"answer":"对"},
+{"id":65,"type":"judge","title":"商品详情页未标注运费险，主播口播“有运费险”，属于违规。","options":["对","错"],"answer":"对"},
+{"id":66,"type":"judge","title":"宣传“假一赔二”，属于符合平台要求的假货赔付表述。","options":["对","错"],"answer":"错"},
+{"id":67,"type":"judge","title":"主播口播“不喜欢免费退、免运费”，但商品详情页未标注承担退货运费，属于违规。","options":["对","错"],"answer":"对"},
+{"id":68,"type":"judge","title":"宣传“终身免费保修”，属于违规的过度承诺服务权益。","options":["对","错"],"answer":"对"},
+{"id":69,"type":"judge","title":"商品有运费险，主播宣传“包全部退货运费”，属于合规表述。","options":["对","错"],"answer":"错"},
+{"id":70,"type":"judge","title":"主播宣传商品为“安心购商品”，实际并非，属于“售后服务不符”违规。","options":["对","错"],"answer":"对"},
+{"id":71,"type":"judge","title":"单场直播中累计出现3次“售后服务不符”违规，属于情节严重。","options":["对","错"],"answer":"对"},
+{"id":72,"type":"judge","title":"近14天内直播累计6场及以上重复违规，属于情节特别严重。","options":["对","错"],"answer":"对"},
+{"id":73,"type":"judge","title":"短视频近14天内累计违规2次，属于情节轻微。","options":["对","错"],"answer":"错"},
+{"id":74,"type":"judge","title":"平台对情节轻微的违规，仅会警告、下架违规商品，不会冻结佣金。","options":["对","错"],"answer":"对"},
+{"id":75,"type":"judge","title":"主播在直播中不提及任何售后相关内容，就不会出现“售后服务不符”违规。","options":["对","错"],"answer":"对"},
+{"id":76,"type":"judge","title":"背景板标注的售后权益，只要商品详情页有标注，就合规。","options":["对","错"],"answer":"对"},
+{"id":77,"type":"judge","title":"字幕宣传的运费险服务，只要商品有运费险，就可以写“包全部运费”。","options":["对","错"],"answer":"错"},
+{"id":78,"type":"judge","title":"管理员评论中夸大售后权益，也属于“售后服务不符”违规。","options":["对","错"],"answer":"对"},
+{"id":79,"type":"judge","title":"宣传课程“永久有效、无限回看”，属于合规表述。","options":["对","错"],"answer":"错"},
+{"id":80,"type":"judge","title":"宣传流量套餐“终身有效”，属于违规表述。","options":["对","错"],"answer":"对"},
+{"id":81,"type":"judge","title":"商品详情页标注“支持7天无理由退换”，主播口播“支持15天无理由退换”，属于合规的服务升级。","options":["对","错"],"answer":"错"},
+{"id":82,"type":"judge","title":"商品详情页标注“无运费险”，主播口播“退货免运费”，属于违规。","options":["对","错"],"answer":"对"},
+{"id":83,"type":"judge","title":"主播宣传“买贵必赔，差价双倍返还”，但商品详情页无价保相关信息，属于违规。","options":["对","错"],"answer":"对"},
+{"id":84,"type":"judge","title":"商品详情页标注“质保期为1年”，主播口播“质保期为5年”，属于违规。","options":["对","错"],"answer":"对"},
+{"id":85,"type":"judge","title":"主播宣传“假一罚四”，商品详情页有相关信息，属于合规表述。","options":["对","错"],"answer":"对"},
+{"id":86,"type":"judge","title":"商品详情页未标注“承担退货运费”，主播口播“退货我承担运费”，属于违规。","options":["对","错"],"answer":"对"},
+{"id":87,"type":"judge","title":"平台对情节特别严重的违规，会永久关闭商品分享权限、冻结佣金账户30天。","options":["对","错"],"answer":"对"},
+{"id":88,"type":"judge","title":"主播宣传“商品使用后无效全额退款”，属于合规表述。","options":["对","错"],"answer":"错"},
+{"id":89,"type":"judge","title":"商品详情页标注“支持运费险”，主播如实说明“退货可按运费险规则赔付”，属于合规表述。","options":["对","错"],"answer":"对"},
+{"id":90,"type":"judge","title":"主播宣传“不影响二次销售可退换”，属于合规表述。","options":["对","错"],"answer":"对"},
+{"id":91,"type":"judge","title":"宣传“终身免费提供产品更新服务”，属于合规表述。","options":["对","错"],"answer":"错"},
+{"id":92,"type":"judge","title":"商品详情页标注“非安心购商品”，主播口播“安心购商品”，属于违规。","options":["对","错"],"answer":"对"},
+{"id":93,"type":"judge","title":"主播在直播中宣传“运费险退货包全部运费”，商品有运费险，属于合规表述。","options":["对","错"],"answer":"错"},
+{"id":94,"type":"judge","title":"短视频文案夸大售后权益，与商品详情页不一致，属于“售后服务不符”违规。","options":["对","错"],"answer":"对"},
+{"id":95,"type":"judge","title":"商品详情页标注“支持7天无理由退换”，主播口播一致，属于合规表述。","options":["对","错"],"answer":"对"},
+{"id":96,"type":"judge","title":"主播宣传“商品有质量问题支持退款”，属于合规表述。","options":["对","错"],"answer":"对"},
+{"id":97,"type":"judge","title":"宣传“拆封后可无理由退换”，商品详情页有标注，属于合规表述。","options":["对","错"],"answer":"对"},
+{"id":98,"type":"judge","title":"商品详情页标注“无运费险”，主播不提及运费相关内容，属于合规表述。","options":["对","错"],"answer":"对"},
+{"id":99,"type":"judge","title":"主播宣传“商品插上电终身免费使用”，属于合规表述。","options":["对","错"],"answer":"错"},
+{"id":100,"type":"judge","title":"主播要避免“售后服务不符”违规，所有售后相关表述都必须与商品详情页完全一致。","options":["对","错"],"answer":"对"}
+];
+
+let timeLeft = 45 * 60;
+let timerInterval;
+
+function initExam() {
+    const form = document.getElementById("exam-form");
+    questions.forEach((q, idx) => {
+        let typeText = q.type === "single" ? "单选题" : q.type === "multiple" ? "多选题" : "判断题";
+        let qDiv = document.createElement("div");
+        qDiv.className = "question";
+        qDiv.innerHTML = `
+            <div class="q-type">${typeText}</div>
+            <div class="question-title">${idx + 1}. ${q.title}</div>
+            <div class="options">
+                ${q.options.map(opt => `
+                    <div class="option">
+                        <input type="${q.type === 'multiple' ? 'checkbox' : 'radio'}" name="q${q.id}" value="${opt[0]}">
+                        ${opt}
+                    </div>
+                `).join("")}
+            </div>
+        `;
+        form.appendChild(qDiv);
+    });
+    startTimer();
+}
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        let m = Math.floor(timeLeft / 60);
+        let s = timeLeft % 60;
+        document.getElementById("timer").innerText = `剩余时间：${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            submitExam();
+        }
+    }, 1000);
+}
+
+function submitExam() {
+    clearInterval(timerInterval);
+    const userName = document.getElementById("name").value.trim();
+    const userId = document.getElementById("id").value.trim();
+    if (!userName) {
+        alert("请填写姓名后再提交！");
+        return;
+    }
+
+    let score = 0;
+    let errList = [];
+    questions.forEach(q => {
+        let sel = document.querySelectorAll(`input[name="q${q.id}"]:checked`);
+        let ans;
+        if (q.type === "multiple") {
+            ans = Array.from(sel).map(el => el.value).sort().join("");
+        } else {
+            ans = sel[0] ? sel[0].value : "";
+        }
+        if (ans === q.answer) {
+            score++;
+        } else {
+            errList.push({
+                id: q.id,
+                title: q.title,
+                user: ans || "未作答",
+                right: q.answer
+            });
+        }
+    });
+
+    saveScoreToLocal(userName, userId, score);
+
+    document.getElementById("exam-form").style.display = "none";
+    document.querySelector(".submit-btn").style.display = "none";
+    document.getElementById("result").style.display = "block";
+    document.getElementById("score").innerText = `得分：${score}/100`;
+    
+    let resText = "";
+    if (score >= 80) {
+        resText = `恭喜${userName}！考核通过，售后服务规则掌握良好。`;
+    } else if (score >= 60) {
+        resText = `${userName}，考核及格（${score}分），仍需加强售后服务规则学习。`;
+    } else {
+        resText = `${userName}，考核未通过（${score}分），请重新学习后再参加考核。`;
+    }
+    document.getElementById("result-text").innerText = resText;
+
+    let errHtml = `<h3>错题回顾（共${errList.length}题）</h3>`;
+    if (errList.length === 0) {
+        errHtml = "<h3>恭喜！全部答对，无错题</h3>";
+    } else {
+        errList.forEach(e => {
+            errHtml += `<p><strong>${e.id}. ${e.title}</strong><br>你的答案：${e.user}<br>正确答案：${e.right}</p>`;
+        });
+    }
+    document.getElementById("error-list").innerHTML = errHtml;
+}
+
+function saveScoreToLocal(name, id, score) {
+    let scores = JSON.parse(localStorage.getItem("examScores")) || [];
+    scores.push({
+        name: name,
+        id: id || "无工号",
+        score: score,
+        time: new Date().toLocaleString()
+    });
+    localStorage.setItem("examScores", JSON.stringify(scores));
+}
+
+window.onload = initExam;
+</script>
+</body>
+</html>
