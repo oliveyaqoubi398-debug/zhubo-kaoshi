@@ -20,7 +20,7 @@
             margin: 0 auto; 
             background: #f8f5f0; 
         }
-        /* 修复微信抖动：固定布局 + 禁止浮动晃动 */
+        /* 微信端防抖动头部布局 */
         .header-bar { 
             background-color: #000; 
             color: #fff; 
@@ -57,6 +57,7 @@
             font-weight: bold;
             flex-shrink: 0;
         }
+        /* 这里是你要改的标题位置 */
         .exam-title { 
             padding: 20px; 
             font-size: 24px; 
@@ -167,6 +168,7 @@
 </head>
 <body>
 <div class="wrap">
+    <!-- 顶部LOGO+钱皇蚕丝+倒计时，完全保留 -->
     <div class="header-bar">
         <div class="logo-area">
             <img src="logo.png" alt="钱皇蚕丝LOGO">
@@ -175,7 +177,8 @@
         <div class="timer-box" id="timer">剩余时间：30:00</div>
     </div>
 
-    <div class="exam-title">共40题（满分40 及格>36分）</div>
+    <!-- 这里是你要修改的标题，已经改成“抖音虚假宣传规则实施考题” -->
+    <div class="exam-title">抖音虚假宣传规则实施考题（共40题，满分40，及格≥36分）</div>
 
     <div class="info-box">
         <label class="info-label" for="name">姓名（主播/中控）：</label>
