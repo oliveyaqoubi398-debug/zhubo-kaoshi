@@ -3,115 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>钱皇蚕丝 - 考核成绩统计后台</title>
+    <title>钱皇丝绸</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", sans-serif; }
-        body { background: #f8f5f0; padding: 20px; }
-        .header { background: #000; color: #D4AF37; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
-        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2 { color: #000; margin-bottom: 20px; text-align: center; }
-        .btn-group { margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
-        .btn-export { background: #D4AF37; color: #000; }
-        .btn-clear { background: #ff4444; color: #fff; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background: #f9f6f0; color: #000; font-weight: bold; }
-        tr:hover { background: #f9f6f0; }
-        .no-data { text-align: center; padding: 50px; color: #999; font-size: 18px; }
+        *{margin:0;padding:0;box-sizing:border-box;font-family: "Microsoft YaHei",sans-serif;}
+        body{background:#f5f5f5;padding:20px;}
+        .container{max-width:1000px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+        h1{text-align:center;color:#333;margin-bottom:20px;font-size:24px;}
+        .tip{text-align:center;color:#666;margin-bottom:20px;}
+        .total{text-align:center;margin-bottom:20px;font-size:18px;}
+        .pass{color:green;font-weight:bold;}
+        .fail{color:red;font-weight:bold;}
+        table{width:100%;border-collapse:collapse;}
+        th,td{padding:12px;text-align:center;border:1px solid #ddd;}
+        th{background:#f8f8f8;font-weight:bold;}
+        tr:nth-child(even){background:#fafafa;}
+        .refresh{display:block;margin:20px auto;padding:10px 20px;background:#007bff;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:16px;}
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>钱皇蚕丝 - 主播考核成绩统计后台</h1>
-    </div>
-
     <div class="container">
-        <h2>所有考生成绩列表</h2>
-        
-        <div class="btn-group">
-            <button class="btn btn-export" onclick="exportExcel()">导出Excel表格</button>
-            <button class="btn btn-clear" onclick="clearScores()">清空所有成绩</button>
-        </div>
-
-        <div id="score-table">
-        </div>
+        <h1>成绩统计（40题版）</h1>
+        <div class="tip">满分：40分 | 及格线：≥40分</div>
+        <div class="total" id="total"></div>
+        <button class="refresh" onclick="loadScores()">刷新成绩</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>工号</th>
+                    <th>得分</th>
+                    <th>结果</th>
+                    <th>考试时间</th>
+                </tr>
+            </thead>
+            <tbody id="scoreBody"></tbody>
+        </table>
     </div>
 
 <script>
-function loadScores() {
+function loadScores(){
     let scores = JSON.parse(localStorage.getItem("examScores")) || [];
-    const tableDiv = document.getElementById("score-table");
-    
-    if (scores.length === 0) {
-        tableDiv.innerHTML = '<div class="no-data">暂无考核成绩数据</div>';
-        return;
-    }
+    let body = document.getElementById("scoreBody");
+    let total = document.getElementById("total");
+    body.innerHTML = "";
 
-    let tableHtml = `
-        <table>
-            <tr>
-                <th>序号</th>
-                <th>姓名</th>
-                <th>工号</th>
-                <th>得分</th>
-                <th>考核时间</th>
-                <th>考核结果</th>
-            </tr>
-    `;
-    
-    scores.forEach((item, index) => {
-        let result = item.score >= 80 ? "优秀" : item.score >= 60 ? "及格" : "不及格";
-        let resultColor = item.score >= 80 ? "#008800" : item.score >= 60 ? "#D4AF37" : "#ff4444";
-        
-        tableHtml += `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${item.name}</td>
-                <td>${item.id}</td>
-                <td>${item.score}/100</td>
-                <td>${item.time}</td>
-                <td style="color:${resultColor};font-weight:bold;">${result}</td>
-            </tr>
+    let passNum = 0;
+    let failNum = 0;
+
+    scores.forEach((s, i) => {
+        let score = parseInt(s.score);
+        let pass = score >= 36;
+        if(pass) passNum++;
+        else failNum++;
+
+        let tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${i+1}</td>
+            <td>${s.name}</td>
+            <td>${s.id}</td>
+            <td>${score}/40</td>
+            <td class="${pass ? 'pass' : 'fail'}">${pass ? '通过' : '未通过'}</td>
+            <td>${s.time}</td>
         `;
-    });
-    
-    tableHtml += "</table>";
-    tableDiv.innerHTML = tableHtml;
-}
-
-function exportExcel() {
-    let scores = JSON.parse(localStorage.getItem("examScores")) || [];
-    if (scores.length === 0) {
-        alert("暂无数据可导出！");
-        return;
-    }
-
-    let csvContent = "序号,姓名,工号,得分,考核时间,考核结果\n";
-    scores.forEach((item, index) => {
-        let result = item.score >= 80 ? "优秀" : item.score >= 60 ? "及格" : "不及格";
-        csvContent += `${index + 1},${item.name},${item.id},${item.score}/100,${item.time},${result}\n`;
+        body.appendChild(tr);
     });
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `钱皇蚕丝主播考核成绩_${new Date().toLocaleDateString()}.csv`);
-    link.style.display = "none";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    total.innerHTML = `总人数：${scores.length} 人 | 通过：${passNum} 人 | 未通过：${failNum} 人`;
 }
-
-function clearScores() {
-    if (confirm("确定要清空所有成绩数据吗？此操作不可恢复！")) {
-        localStorage.removeItem("examScores");
-        loadScores();
-        alert("已清空所有成绩数据！");
-    }
-}
-
 window.onload = loadScores;
 </script>
 </body>
