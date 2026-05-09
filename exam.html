@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- 这里是微信顶部显示的标题，已经改成你要的了 -->
+    <title>抖音虚假宣传实施规则考题</title>
     <style>
         * { 
             margin: 0; padding: 0; 
@@ -20,7 +22,6 @@
             margin: 0 auto; 
             background: #f8f5f0; 
         }
-        /* 微信端防抖动头部布局 */
         .header-bar { 
             background-color: #000; 
             color: #fff; 
@@ -57,7 +58,6 @@
             font-weight: bold;
             flex-shrink: 0;
         }
-        /* 这里是你要改的标题位置 */
         .exam-title { 
             padding: 20px; 
             font-size: 24px; 
@@ -156,19 +156,10 @@
             color: #333; 
             margin-bottom: 30px; 
         }
-        .error-list { 
-            text-align: left; 
-            padding: 20px; 
-            background-color: #f9f9f9; 
-            border-radius: 8px; 
-            font-size: 16px; 
-            border:1px solid #eee; 
-        }
     </style>
 </head>
 <body>
 <div class="wrap">
-    <!-- 顶部LOGO+钱皇蚕丝+倒计时，完全保留 -->
     <div class="header-bar">
         <div class="logo-area">
             <img src="logo.png" alt="钱皇蚕丝LOGO">
@@ -177,8 +168,8 @@
         <div class="timer-box" id="timer">剩余时间：30:00</div>
     </div>
 
-    <!-- 这里是你要修改的标题，已经改成“抖音虚假宣传规则实施考题” -->
-    <div class="exam-title">抖音虚假宣传规则实施考题（共40题，满分40，及格≥36分）</div>
+    <!-- 下面的标题也修正为40题版本 -->
+    <div class="exam-title">共40题（满分40 及格≥36分）</div>
 
     <div class="info-box">
         <label class="info-label" for="name">姓名（主播/中控）：</label>
@@ -194,7 +185,6 @@
         <h2>考核结果</h2>
         <div class="result-score" id="score">0</div>
         <div class="result-text" id="result-text"></div>
-        <div class="error-list" id="error-list"></div>
     </div>
 </div>
 
